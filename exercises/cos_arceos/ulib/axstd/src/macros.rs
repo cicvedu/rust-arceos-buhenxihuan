@@ -22,7 +22,7 @@ macro_rules! println {
     }
 }
 
-
+#[macro_export]
 macro_rules! println_prefix {
     () => { $crate::print!("\n") };
     ($prefix:tt, $($arg:tt)*) => {

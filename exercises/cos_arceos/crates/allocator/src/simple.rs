@@ -7,26 +7,26 @@ use core::num::NonZeroUsize;
 
 use crate::{AllocResult, BaseAllocator, ByteAllocator};
 
-pub struct SimpleByteAllocator{
-    start:usize,
-    next:usize,
-    allocations:usize,
-    end:usize,
+pub struct SimpleByteAllocator {
+    start: usize,
+    next: usize,
+    allocations: usize,
+    end: usize,
 }
 
 impl SimpleByteAllocator {
     pub const fn new() -> Self {
         Self {
-            start:0,
-            next:0,
-            allocations:0,
-            end:0,
+            start: 0,
+            next: 0,
+            allocations: 0,
+            end: 0,
         }
     }
 }
 
 impl BaseAllocator for SimpleByteAllocator {
-    fn init(&mut self, _start: usize, _size: usize) {
+    fn init(&mut self, start: usize, size: usize) {
         self.start = start;
         self.next = self.start;
         self.end = self.start + size;
@@ -39,7 +39,7 @@ impl BaseAllocator for SimpleByteAllocator {
 }
 
 impl ByteAllocator for SimpleByteAllocator {
-    fn alloc(&mut self, _layout: Layout) -> AllocResult<NonZeroUsize> {
+    fn alloc(&mut self, layout: Layout) -> AllocResult<NonZeroUsize> {
         let size = layout.size();
         let align = layout.align();
         let align_mask = !(align - 1);
@@ -53,6 +53,7 @@ impl ByteAllocator for SimpleByteAllocator {
             self.next = start + size;
             Ok(NonZeroUsize::new(start).unwrap())
         }
+        
     }
 
     fn dealloc(&mut self, _pos: NonZeroUsize, _layout: Layout) {
